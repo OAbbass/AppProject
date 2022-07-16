@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/black"
+    tools:context=".MainActivity"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        />
+
+
+    <EditText
+        android:id="@+id/name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/teal_200"
+        android:hint="   Trainer Name: "
+        android:paddingVertical="15dp"
+        android:textAllCaps="true"
+        android:textSize="15dp"
+        android:textStyle="bold">
+
+    </EditText>
+
+    <EditText
+        android:id="@+id/Date"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/name"
+        android:background="@color/teal_200"
+        android:paddingVertical="15dp"
+        android:hint="   Date: "
+        android:textAllCaps="true"
+        android:textSize="15dp"
+        android:textStyle="bold">
+
+    </EditText>
+
+
+    <Spinner
+        android:id="@+id/session"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/Date"
+        android:background="@color/teal_200"
+        android:paddingVertical="15dp"
+        android:textAllCaps="true"
+        android:textSize="15dp"
+        android:textStyle="bold"></Spinner>
+
+
+    <Spinner
+        android:id="@+id/stype"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/session"
+        android:background="@color/teal_200"
+        android:paddingVertical="15dp"
+        android:textAllCaps="true"
+        android:textSize="15dp"
+        android:textStyle="bold">
+    </Spinner>
+
+    <Spinner
+        android:id="@+id/time"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/stype"
+        android:background="@color/teal_200"
+        android:paddingVertical="15dp"
+        android:textAllCaps="true"
+        android:textSize="15dp"
+        android:textStyle="bold">
+    </Spinner>
+
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/finish"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/time"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="90dp"
+        android:background="@color/teal_200"
+        android:paddingHorizontal="5dp"
+        android:text="Finish"
+        android:textSize="25dp" />
+
+
+
+</RelativeLayout>

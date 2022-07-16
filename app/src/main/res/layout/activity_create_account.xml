@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/black"
+    tools:context=".MainActivity"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        />
+
+
+    <EditText
+        android:id="@+id/First"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/teal_200"
+        android:hint="   First Name: "
+        android:paddingVertical="15dp"
+        android:textAllCaps="true"
+        android:textSize="15dp"
+        android:textStyle="bold">
+
+    </EditText>
+
+        <EditText
+            android:id="@+id/Last"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/First"
+            android:background="@color/teal_200"
+            android:paddingVertical="15dp"
+            android:hint="   Last Name: "
+            android:textAllCaps="true"
+            android:textSize="15dp"
+            android:textStyle="bold">
+
+        </EditText>
+
+    <EditText
+        android:id="@+id/email"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/Last"
+        android:background="@color/teal_200"
+        android:hint="   Email: "
+        android:paddingVertical="15dp"
+        android:textAllCaps="true"
+        android:textSize="15dp"
+        android:textStyle="bold">
+
+    </EditText>
+
+
+    <EditText
+        android:id="@+id/Password"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/email"
+        android:background="@color/teal_200"
+        android:hint="   Password: "
+        android:inputType="textPassword"
+        android:paddingVertical="15dp"
+        android:textAllCaps="true"
+        android:textSize="15dp"
+        android:textStyle="bold">
+
+    </EditText>
+
+
+        <EditText
+            android:id="@+id/Age"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/Password"
+            android:background="@color/teal_200"
+            android:paddingVertical="15dp"
+            android:hint="   Age: "
+            android:textAllCaps="true"
+            android:textSize="15dp"
+            android:textStyle="bold">
+
+        </EditText>
+
+    <Spinner
+        android:id="@+id/Type"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/Age"
+        android:background="@color/teal_200"
+        android:hint="   Type: "
+        android:paddingVertical="15dp"
+        android:textAllCaps="true"
+        android:textSize="15dp"
+        android:textStyle="bold">
+
+    </Spinner>
+
+    <Spinner
+        android:id="@+id/Gender"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/Type"
+        android:background="@color/teal_200"
+        android:hint="   Gender: "
+        android:paddingVertical="15dp"
+        android:textAllCaps="true"
+        android:textSize="15dp"
+        android:textStyle="bold">
+
+    </Spinner>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/finish"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/Gender"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="90dp"
+        android:background="@color/teal_200"
+        android:paddingHorizontal="5dp"
+        android:text="Finish"
+        android:textSize="25dp" />
+
+
+
+
+    </RelativeLayout>
+

@@ -1,0 +1,37 @@
+<resources>
+    <string name="app_name">Project</string>
+
+    <string-array name="Gender">
+        <item> Male </item>
+        <item> Female </item>
+    </string-array>
+
+    <string-array name="Type">
+        <item> Trainer </item>
+        <item> Client </item>
+    </string-array>
+
+    <string-array name="Sessions">
+        <item> Boxing </item>
+        <item> Fitness </item>
+        <item> Yoga </item>
+    </string-array>
+
+    <string-array name="TimeSlots">
+        <item> 9:00 </item>
+        <item> 10:00 </item>
+        <item> 11:00 </item>
+        <item> 12:00 </item>
+        <item> 13:00 </item>
+        <item> 14:00 </item>
+        <item> 15:00 </item>
+        <item> 16:00 </item>
+        <item> 17:00 </item>
+    </string-array>
+
+    <string-array name="SessionTypes">
+        <item> Private </item>
+        <item> Group </item>
+    </string-array>
+
+</resources>

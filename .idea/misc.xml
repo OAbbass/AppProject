@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="..\:/Users/omar abbas/AndroidStudioProjects/Project 4/app/src/main/res/layout/activity_boxing.xml" value="0.3234375" />
+        <entry key="..\:/Users/omar abbas/AndroidStudioProjects/Project 4/app/src/main/res/layout/activity_calendar.xml" value="0.378125" />
+        <entry key="..\:/Users/omar abbas/AndroidStudioProjects/Project 4/app/src/main/res/layout/activity_create_account.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/omar abbas/AndroidStudioProjects/Project 4/app/src/main/res/layout/activity_login.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/omar abbas/AndroidStudioProjects/Project 4/app/src/main/res/layout/activity_main2.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/omar abbas/AndroidStudioProjects/Project 4/app/src/main/res/layout/activity_making_session.xml" value="0.378125" />
+        <entry key="..\:/Users/omar abbas/AndroidStudioProjects/Project 4/app/src/main/res/layout/activity_private_package.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/omar abbas/AndroidStudioProjects/Project 4/app/src/main/res/layout/activity_register_session.xml" value="0.378125" />
+        <entry key="..\:/Users/omar abbas/AndroidStudioProjects/Project 4/app/src/main/res/layout/activity_scheduling_sessions.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/omar abbas/AndroidStudioProjects/Project 4/app/src/main/res/layout/activity_view_packages.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/omar abbas/AndroidStudioProjects/Project 4/app/src/main/res/layout/recycleview_custom_layout.xml" value="0.3770833333333333" />
+        <entry key="..\:/Users/omar abbas/AndroidStudioProjects/Project/app/src/main/res/layout/activity_login.xml" value="0.35260416666666666" />
+        <entry key="..\:/Users/omar abbas/AndroidStudioProjects/Project/app/src/main/res/layout/activity_main.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/omar abbas/AndroidStudioProjects/Project/app/src/main/res/layout/activity_main2.xml" value="0.18802083333333333" />
+        <entry key="..\:/Users/omar abbas/AndroidStudioProjects/Project/app/src/main/res/layout/activity_view_membership.xml" value="0.36666666666666664" />
+        <entry key="app/src/main/res/layout/activity_boxing.xml" value="0.18115942028985507" />
+        <entry key="app/src/main/res/layout/activity_fitness.xml" value="0.18115942028985507" />
+        <entry key="app/src/main/res/layout/activity_group_package.xml" value="0.18115942028985507" />
+        <entry key="app/src/main/res/layout/activity_main2.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/activity_private_package.xml" value="0.18115942028985507" />
+        <entry key="app/src/main/res/layout/activity_scheduling_sessions.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/activity_view_membership.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/activity_view_packages.xml" value="0.18115942028985507" />
+        <entry key="app/src/main/res/layout/activity_yoga.xml" value="0.1543859649122807" />
+      </map>
+    </option>
+  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="Android Studio default JDK" project-jdk-type="JavaSDK">
+    <output url="file://$PROJECT_DIR$/build/classes" />
+  </component>
+  <component name="ProjectType">
+    <option name="id" value="Android" />
+  </component>
+</project>
