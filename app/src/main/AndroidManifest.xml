@@ -16,6 +16,12 @@
         android:theme="@style/Theme.Project"
         tools:targetApi="31">
         <activity
+            android:name=".TrainerSchedule"
+            android:exported="false" />
+        <activity
+            android:name=".ViewTrainers"
+            android:exported="false" />
+        <activity
             android:name=".RegisterSession"
             android:exported="false" />
         <activity
@@ -31,22 +37,10 @@
             android:name=".boxingClasses"
             android:exported="false" />
         <activity
-            android:name=".fitnessClasses"
-            android:exported="false" />
-        <activity
-            android:name=".yogaClasses"
-            android:exported="false" />
-        <activity
-            android:name=".Schedule"
-            android:exported="false" />
-        <activity
             android:name=".GroupSession"
             android:exported="false" />
         <activity
             android:name=".PrivateSession"
-            android:exported="false" />
-        <activity
-            android:name=".viewPackages"
             android:exported="false" />
         <activity
             android:name=".ViewMembership"

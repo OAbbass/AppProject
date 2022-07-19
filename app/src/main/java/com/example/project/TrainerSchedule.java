@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -16,20 +17,19 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
-public class RegisterSession extends AppCompatActivity {
+public class TrainerSchedule extends AppCompatActivity {
 
     RecyclerView recycle;
     ArrayList<Session> list;
     DatabaseReference databaseReference;
     MyAdapter adapter;
-
-
+    String trainID;
 
 
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        startActivity(new Intent(RegisterSession.this, MainActivity.class));
+        startActivity(new Intent(TrainerSchedule.this, MainActivity.class));
         finish();
     }
 
@@ -37,6 +37,10 @@ public class RegisterSession extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register_session);
+
+        Intent receive = getIntent();
+        trainID = receive.getStringExtra("KEY_SENDER");
+        Log.e("TAG", trainID);
 
         recycle = (RecyclerView)(findViewById(R.id.Recyleview));
         databaseReference = FirebaseDatabase.getInstance().getReference("sessions");
@@ -52,7 +56,10 @@ public class RegisterSession extends AppCompatActivity {
                 for (DataSnapshot dataSnapshot: snapshot.getChildren())
                 {
                     Session session = dataSnapshot.getValue(Session.class);
-                    list.add(session);
+                    if (session.getTrainerID().toString().equals(trainID))
+                    {
+                        list.add(session);
+                    }
                 }
                 adapter.notifyDataSetChanged();
             }

@@ -1,7 +1,10 @@
 package com.example.project;
 
 import android.content.Intent;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
@@ -22,13 +25,24 @@ import org.json.JSONObject;
 
 import java.io.StringReader;
 import java.sql.Time;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
@@ -44,16 +58,27 @@ public class ViewMembership extends AppCompatActivity {
     public TextView cert;
     public TextView type;
     public TextView expiration;
+    public String userID;
 
 
-    FirebaseFirestore fStore;
-    String userID;
-    FirebaseAuth fAuth;
+    private FirebaseDatabase mFirebaseDatabase;
+    private FirebaseAuth mAuth;
+    private DatabaseReference myRef;
+
+    public void onBackPressed() {
+        super.onBackPressed();
+        startActivity(new Intent(ViewMembership.this, MainActivity.class));
+        finish();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_membership);
+
+        mAuth = FirebaseAuth.getInstance();
+        myRef = FirebaseDatabase.getInstance().getReference("users");
+
 
         firstN = (TextView) findViewById(R.id.first);
         lastN = (TextView) findViewById(R.id.last);
@@ -62,28 +87,36 @@ public class ViewMembership extends AppCompatActivity {
         type = (TextView) findViewById(R.id.type);
         expiration = (TextView) findViewById(R.id.Exp);
 
-        fStore = FirebaseFirestore.getInstance();
-        fAuth = FirebaseAuth.getInstance();
-        userID = fAuth.getCurrentUser().getUid().toString();
 
-        DocumentReference documentReference = fStore.collection("users").document(userID);
-        documentReference.addSnapshotListener(this, new EventListener<DocumentSnapshot>() {
+//kalogip341@tebyy.com
+        myRef.addValueEventListener(new ValueEventListener() {
             @Override
-            public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
-                firstN.setText(value.getString("First Name"));
-                lastN.setText(value.getString("Last Name"));
-                age.setText(value.getString("Age"));
-                gender.setText(value.getString("Gender"));
-                type.setText(value.getString("Type of Account"));
-                expiration.setText("TEST");
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot dataSnapshot: snapshot.getChildren())
+                {
+                    Users user = dataSnapshot.getValue(Users.class);
+                    userID = mAuth.getCurrentUser().getUid().toString();
+                    Log.e("TAG", userID);
+                    Log.e("TAG", user.getID().toString());
+
+                    if (userID.equals(user.getID().toString()))
+                    {
+                        firstN.setText(user.getFirstname().toString());
+                        lastN.setText(user.getLastname().toString());
+                        age.setText(user.getAge().toString());
+                        gender.setText(user.getGender().toString());
+                        type.setText(user.getType().toString());
+                        break;
+                    }
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
             }
         });
 
-        String finame;
-        String laname;
-        String age;
-        String gender;
-        String type;
-
     }
 }
+
+

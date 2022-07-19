@@ -11,6 +11,11 @@ import android.widget.Button;
 import android.widget.CalendarView;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
@@ -18,6 +23,12 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 
 public class Calendar extends AppCompatActivity {
+
+    public void onBackPressed() {
+        super.onBackPressed();
+        startActivity(new Intent(Calendar.this, MainActivity.class));
+        finish();
+    }
 
     Button button;
     CalendarView calendar;
@@ -30,6 +41,7 @@ public class Calendar extends AppCompatActivity {
 
 
     public FirebaseAuth mAuth;
+    private DatabaseReference myRef;
     FirebaseFirestore fStore;
 
 
@@ -51,33 +63,44 @@ public class Calendar extends AppCompatActivity {
             }
         });
 
-
-        ID = mAuth.getCurrentUser().getUid().toString();
-        DocumentReference documentReference = fStore.collection("users").document(ID);
-        documentReference.addSnapshotListener(this, new EventListener<DocumentSnapshot>() {
+        myRef = FirebaseDatabase.getInstance().getReference("users");
+        myRef.addValueEventListener(new ValueEventListener() {
             @Override
-            public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
-                typecheck = value.getString("Type of Account");
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot dataSnapshot: snapshot.getChildren())
+                {
+                    Users user = dataSnapshot.getValue(Users.class);
+                    String userID = mAuth.getCurrentUser().getUid().toString();
 
-                if (typecheck.equals(trainer))
-                {
-                    button.setText("Create Session");
-                    button.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            Intent sender = new Intent(getApplicationContext(), MakingSession.class);
-                            sender.putExtra("KEY_SENDER", date);
-                            startActivity(sender);
+                    if (userID.equals(user.getID().toString()))
+                    {
+                        typecheck = user.getType().toString();
+                        if (typecheck.equals(trainer))
+                        {
+                            button.setText("Create Session");
+                            button.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    Intent sender = new Intent(getApplicationContext(), MakingSession.class);
+                                    sender.putExtra("KEY_SENDER", date);
+                                    startActivity(sender);
+                                }
+                            });
                         }
-                    });
+                        else
+                        {
+                            button.setText("Register for Session");
+                        }
+                    }
                 }
-                else
-                {
-                    button.setText("Register for Session");
-                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
 
             }
         });
+
+
 
 
 

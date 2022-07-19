@@ -7,7 +7,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 
+import com.google.android.gms.dynamic.IFragmentWrapper;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -16,12 +19,15 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
-public class RegisterSession extends AppCompatActivity {
+public class ViewTrainers extends AppCompatActivity {
 
     RecyclerView recycle;
-    ArrayList<Session> list;
+    ArrayList<Users> list;
     DatabaseReference databaseReference;
-    MyAdapter adapter;
+    MyAdapter2 adapter2;
+    String trainer = "Trainer";
+    FirebaseAuth mAuth;
+    private String userID;
 
 
 
@@ -29,34 +35,46 @@ public class RegisterSession extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        startActivity(new Intent(RegisterSession.this, MainActivity.class));
+        startActivity(new Intent(ViewTrainers.this, MainActivity.class));
         finish();
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+
+
+        mAuth = FirebaseAuth.getInstance();
+        userID = mAuth.getCurrentUser().getUid().toString();
+        Log.e("TAG", userID);
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_register_session);
+        setContentView(R.layout.activity_view_trainers);
 
         recycle = (RecyclerView)(findViewById(R.id.Recyleview));
-        databaseReference = FirebaseDatabase.getInstance().getReference("sessions");
 
+        databaseReference = FirebaseDatabase.getInstance().getReference("users");
 
         list = new ArrayList<>();
         recycle.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new MyAdapter(this, list);
-        recycle.setAdapter(adapter);
+        adapter2 = new MyAdapter2(this, list);
+        recycle.setAdapter(adapter2);
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for (DataSnapshot dataSnapshot: snapshot.getChildren())
                 {
-                    Session session = dataSnapshot.getValue(Session.class);
-                    list.add(session);
+                    mAuth = FirebaseAuth.getInstance();
+                    userID = mAuth.getCurrentUser().getUid().toString();
+                    Log.e("TAG", userID);
+                    Users user = dataSnapshot.getValue(Users.class);
+                    Log.e("TAG", user.getID().toString());
+                    if (trainer.equals(user.getType().toString()) && !user.getID().toString().equals(userID))
+                    {
+                        list.add(user);
+                    }
                 }
-                adapter.notifyDataSetChanged();
+                adapter2.notifyDataSetChanged();
             }
-
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
 

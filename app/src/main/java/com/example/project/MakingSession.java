@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -15,19 +16,20 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.Vector;
 
 public class MakingSession extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
@@ -42,15 +44,16 @@ public class MakingSession extends AppCompatActivity implements AdapterView.OnIt
     public Calendar calendar;
 
 
-    public FirebaseAuth mAuth;
+    FirebaseAuth mAuth;
     FirebaseFirestore mStore;
     DatabaseReference fStore;
+    private DatabaseReference myRef;
 
 
     String ID;
     String typecheck;
     String date;
-
+    String TrainerID;
 
     String Fullname;
     String TheSession;
@@ -58,6 +61,12 @@ public class MakingSession extends AppCompatActivity implements AdapterView.OnIt
     String TheDate;
     String TheTime;
 
+
+    public void onBackPressed() {
+        super.onBackPressed();
+        startActivity(new Intent(MakingSession.this, Calendar.class));
+        finish();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,6 +83,9 @@ public class MakingSession extends AppCompatActivity implements AdapterView.OnIt
         fStore = FirebaseDatabase.getInstance().getReference();
         first = (EditText) (findViewById(R.id.name));
         Day = (EditText) (findViewById(R.id.Date));
+
+        mAuth = FirebaseAuth.getInstance();
+        myRef = FirebaseDatabase.getInstance().getReference("users");
 
 
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.Sessions, android.R.layout.simple_spinner_dropdown_item);
@@ -98,30 +110,37 @@ public class MakingSession extends AppCompatActivity implements AdapterView.OnIt
         Day.setText(date);
 
 
-        ID = mAuth.getCurrentUser().getUid().toString();
-        DocumentReference documentReference = mStore.collection("users").document(ID);
-        documentReference.addSnapshotListener(this, new EventListener<DocumentSnapshot>() {
+        myRef = FirebaseDatabase.getInstance().getReference("users");
+        myRef.addValueEventListener(new ValueEventListener() {
             @Override
-            public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
-                typecheck = value.getString("Type of Account");
-                Fullname = value.getString("First Name") + " " + value.getString("Last Name");
-                first.setText(Fullname);
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot dataSnapshot: snapshot.getChildren())
+                {
+                    Users user = dataSnapshot.getValue(Users.class);
+                    String userID = mAuth.getCurrentUser().getUid().toString();
+
+                    if (userID.equals(user.getID().toString()))
+                    {
+                        TrainerID = user.getID();
+                        Fullname = user.getFirstname() + " " + user.getLastname();
+                        typecheck = user.getType();
+                        first.setText(Fullname);
+                    }
+                        break;
+                    }
+                }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
             }
         });
+
 
 
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-
-//                DocumentReference documentReference2 = fStore.collection("sessions").document(ID);
-//                Map<String, Object> session = new HashMap<>();
-//                session.put("TrainerName", Fullname);
-//                session.put("Date", date);
-//                session.put("Time",tim.getSelectedItem().toString());
-//                session.put("Availability", sty.getSelectedItem().toString());
-//                session.put("Type of Session", sess.getSelectedItem().toString());
 
                 Fullname = Fullname;
                 TheDate = date;
@@ -130,33 +149,42 @@ public class MakingSession extends AppCompatActivity implements AdapterView.OnIt
                 TheType = sty.getSelectedItem().toString();
                 String sessionid = fStore.push().getKey();
 
-                User session = new User(Fullname, TheDate, TheTime, TheSession, TheType);
-                fStore.child("sessions").child(sessionid).setValue(session).addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if (task.isSuccessful()) {
-                            Toast.makeText(MakingSession.this, "Created New Session for " + Fullname, Toast.LENGTH_SHORT).show();
-                            Intent returnto = new Intent(getApplicationContext(), Calendar.class);
-                            startActivity(returnto);
-                        } else {
-                            Toast.makeText(MakingSession.this, "Error " + task.getException().toString(), Toast.LENGTH_SHORT).show();
+
+                if (sty.getSelectedItem().toString().equals("Private"))
+                {
+                    Session session = new Session(TheSession, TheType, Fullname, TheDate, TheTime, sessionid, 1, 0, "", TrainerID);
+                    fStore.child("sessions").child(sessionid).setValue(session).addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if (task.isSuccessful()) {
+                                Toast.makeText(MakingSession.this, "Created New Session for " + Fullname, Toast.LENGTH_SHORT).show();
+                                Intent returnto = new Intent(getApplicationContext(), Calendar.class);
+                                startActivity(returnto);
+                            }
+                            else
+                            {
+                                Toast.makeText(MakingSession.this, "Error " + task.getException().toString(), Toast.LENGTH_SHORT).show();
+                            }
                         }
-                    }
-                });
-            }
-
-//                documentReference2.set(session).addOnSuccessListener(new OnSuccessListener<Void>() {
-//                    @Override
-//                    public void onSuccess(Void unused) {
-//                        Toast.makeText(MakingSession.this, "Sessio " + Fullname, Toast.LENGTH_SHORT).show();
-//                    }
-//                });
-//
-
-//            }
-//        });
-
-
+                    });
+                }
+                else
+                {
+                    Session session = new Session(TheSession, TheType, Fullname, TheDate, TheTime, sessionid, 10, 0, null, TrainerID);
+                    fStore.child("sessions").child(sessionid).setValue(session).addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if (task.isSuccessful()) {
+                                Toast.makeText(MakingSession.this, "Created New Session for " + Fullname, Toast.LENGTH_SHORT).show();
+                                Intent returnto = new Intent(getApplicationContext(), Calendar.class);
+                                startActivity(returnto);
+                            } else {
+                                Toast.makeText(MakingSession.this, "Error " + task.getException().toString(), Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
+                }
+        }
         });
     }
 
@@ -164,7 +192,6 @@ public class MakingSession extends AppCompatActivity implements AdapterView.OnIt
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long l) {
         String text = parent.getItemAtPosition(position).toString();
-        //Toast.makeText(parent.getContext(), text, Toast.LENGTH_SHORT).show();
     }
 
     @Override

@@ -1,6 +1,7 @@
 package com.example.project;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -16,12 +17,19 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -42,7 +50,14 @@ public class CreateAccount extends AppCompatActivity implements AdapterView.OnIt
 
 
     public FirebaseAuth mAuth;
+    DatabaseReference mStore;
     FirebaseFirestore fStore;
+
+    public void onBackPressed() {
+        super.onBackPressed();
+        startActivity(new Intent(CreateAccount.this, MainActivity.class));
+        finish();
+    }
 
 
     @Override
@@ -65,6 +80,7 @@ public class CreateAccount extends AppCompatActivity implements AdapterView.OnIt
 
         mAuth = FirebaseAuth.getInstance();
         fStore = FirebaseFirestore.getInstance();
+        mStore = FirebaseDatabase.getInstance().getReference();
 
 
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.Type, android.R.layout.simple_spinner_dropdown_item);
@@ -88,6 +104,7 @@ public class CreateAccount extends AppCompatActivity implements AdapterView.OnIt
 
     public void check()
     {
+
         String finame = FirstName.getText().toString().trim();
         String laname = LastName.getText().toString().trim();
         String em = Email.getText().toString().trim();
@@ -101,19 +118,6 @@ public class CreateAccount extends AppCompatActivity implements AdapterView.OnIt
             password.setError("Password must be longer than 6 characters");
             return;
         }
-
-
-//        s = String.valueOf(age.getText());
-//        int i = Integer.parseInt(s);
-//        if (i < 0 || i > 115)
-//        {
-//            age.setError("Age must be older than 0 and smaller than 115");
-//            return;
-//        }
-
-
-
-
         if (mAuth.getCurrentUser() != null){
             startActivity(new Intent(getApplicationContext(), MainActivity.class));
             finish();
@@ -124,22 +128,48 @@ public class CreateAccount extends AppCompatActivity implements AdapterView.OnIt
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful())
                 {
-                    Toast.makeText(CreateAccount.this, finame +" " + laname + " Account Created", Toast.LENGTH_SHORT).show();
-                    userID = mAuth.getCurrentUser().getUid();
-                    DocumentReference documentReference = fStore.collection("users").document(userID);
-                    Map<String, Object> user = new HashMap<>();
-                    user.put("First Name", finame);
-                    user.put("Last Name", laname);
-                    user.put("Age", ag);
-                    user.put("Type of Account", typ);
-                    user.put("Gender", gen);
-
-                    documentReference.set(user).addOnSuccessListener(new OnSuccessListener<Void>() {
+                    FirebaseUser account = mAuth.getCurrentUser();
+                    account.sendEmailVerification().addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void unused) {
-                            Log.d(TAG, "onSuccess: User Profile is Created for " + userID);
+
+                            Toast.makeText(CreateAccount.this, "Verification E-Mail has been sent to " + em, Toast.LENGTH_SHORT).show();
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+
+                            Toast.makeText(CreateAccount.this, "Error " + task.getException().toString(), Toast.LENGTH_SHORT).show();
                         }
                     });
+
+                    userID = mAuth.getCurrentUser().getUid().toString();
+                    DocumentReference documentReference = fStore.collection("users").document(userID);
+                    Users user = new Users(finame, laname, ag, typ, em, gen, userID);
+                    mStore.child("users").child(userID).setValue(user).addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if (task.isSuccessful())
+                            {
+                                Toast.makeText(CreateAccount.this, "Created New Account for " + finame + " " + laname, Toast.LENGTH_SHORT).show();
+                            }
+                            else
+                            {
+                                Toast.makeText(CreateAccount.this, "Error " + task.getException().toString(), Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
+//                    Toast.makeText(CreateAccount.this, finame +" " + laname + " Account Created", Toast.LENGTH_SHORT).show();
+//                    userID = mAuth.getCurrentUser().getUid();
+//                    DocumentReference documentReference = fStore.collection("users").document(userID);
+//                    Map<String, Object> user = new HashMap<>();
+//                    user.put("First Name", finame);
+//                    user.put("Last Name", laname);
+//                    user.put("Age", ag);
+//                    user.put("Type of Account", typ);
+//                    user.put("Gender", gen);
+//                    user.put("Email", em);
+//                    user.put("USER ID", userID)
                 }
                 else
                 {
@@ -148,19 +178,10 @@ public class CreateAccount extends AppCompatActivity implements AdapterView.OnIt
             }
         }
         );
-
         Intent intent = new Intent(this, Login.class);
         startActivity(intent);
 
     }
-
-
-
-
-
-
-
-
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long l) {
