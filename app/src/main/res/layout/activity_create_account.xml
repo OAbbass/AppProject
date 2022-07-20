@@ -136,7 +136,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/Gender"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="45dp"
+        android:layout_marginTop="30dp"
         android:background="@color/grey"
         android:paddingHorizontal="5dp"
         android:text="Finish"
