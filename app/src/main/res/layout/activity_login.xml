@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/black"
+    android:background="@color/grey"
     tools:context=".MainActivity"
     android:orientation="vertical">
 
@@ -17,7 +17,7 @@
             android:id="@+id/Email"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/teal_200"
+            android:background="@color/white"
             android:hint="   E-mail: "
             android:inputType="text"
             android:paddingVertical="15dp"
@@ -32,10 +32,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/Email"
-            android:background="@color/teal_200"
-            android:paddingVertical="15dp"
+            android:background="@color/white"
             android:hint="   Password: "
             android:inputType="textPassword"
+            android:paddingVertical="15dp"
             android:textAllCaps="true"
             android:textSize="15dp"
             android:textStyle="bold">
@@ -50,20 +50,21 @@
             android:layout_centerHorizontal="true"
             android:layout_marginTop="30dp"
             android:layout_marginBottom="150dp"
-            android:background="@color/teal_200"
+            android:background="@color/white"
             android:text="LOGIN"
             android:textSize="25dp" />
 
-        <androidx.appcompat.widget.AppCompatButton
+        <TextView
             android:id="@+id/newto"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/login"
             android:layout_centerHorizontal="true"
-            android:background="@color/black"
+            android:background="@color/grey"
+            android:paddingHorizontal="5dp"
             android:text="New to FitContact?"
             android:textAllCaps="false"
-            android:textColor="@color/teal_200"
+            android:textColor="@color/black"
             android:textSize="15dp" />
 
         <androidx.appcompat.widget.AppCompatButton
@@ -73,7 +74,7 @@
             android:layout_below="@id/newto"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="30dp"
-            android:background="@color/teal_200"
+            android:background="@color/white"
             android:paddingHorizontal="5dp"
             android:text="Sign Up"
             android:textSize="25dp" />

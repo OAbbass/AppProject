@@ -36,13 +36,14 @@ public class Session {
     private Integer currentIn;
     private String trainerID;
     private String attendees;
+    private String trainerEM;
 
 
 
     public Session() {
     }
 
-    public Session(String sess, String ty, String tra, String dat, String ti, String sessionID, Integer size, Integer currentIn, String attendees, String trianerID) {
+    public Session(String sess, String ty, String tra, String dat, String ti, String sessionID, Integer size, Integer currentIn, String attendees, String trianerID, String TrainerEm) {
         this.sess = sess;
         this.ty = ty;
         this.tra = tra;
@@ -53,6 +54,7 @@ public class Session {
         this.currentIn = currentIn;
         this.attendees  = attendees;
         this.trainerID = trianerID;
+        this.trainerEM = trainerEM;
     }
 
 
@@ -99,6 +101,10 @@ public class Session {
         this.currentIn = currentIn;
     }
 
+    public void setTrainerEM(String trainerEM) {
+        this.trainerEM = trainerEM;
+    }
+
 
 
 
@@ -141,6 +147,10 @@ public class Session {
 
     public String getAttendees() {
         return attendees;
+    }
+
+    public String getTrainerEM() {
+        return trainerEM;
     }
 
 }

@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -11,6 +12,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
@@ -31,6 +33,7 @@ import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -46,6 +49,8 @@ public class CreateAccount extends AppCompatActivity implements AdapterView.OnIt
     public Spinner gender;
     public Spinner typeofaccount;
     public Button Finish;
+    public DatePicker Exprationdate;
+    public DatePickerDialog datePickerDialog;
     public String userID;
 
 
@@ -57,6 +62,47 @@ public class CreateAccount extends AppCompatActivity implements AdapterView.OnIt
         super.onBackPressed();
         startActivity(new Intent(CreateAccount.this, MainActivity.class));
         finish();
+    }
+
+
+
+    private String makeDateString(int day, int month, int year) {
+
+        return day + " " + getMonthformat(month) + " " + year;
+    }
+
+    private String getMonthformat(int month) {
+
+        if (month == 1)
+            return "JAN";
+        if (month == 2)
+            return "FEB";
+        if (month == 3)
+            return "MAR";
+        if (month == 4)
+            return "APR";
+        if (month == 5)
+            return "MAY";
+        if (month == 6)
+            return "JUN";
+        if (month == 7)
+            return "JUL";
+        if (month == 8)
+            return "AUG";
+        if (month == 9)
+            return "SEP";
+        if (month == 10)
+            return "OCT";
+        if (month == 11)
+            return "NOV";
+        if (month == 12)
+            return "DEC";
+
+        return "JAN";
+
+    }
+
+    public void openDatePicker(View view) {
     }
 
 
@@ -76,6 +122,7 @@ public class CreateAccount extends AppCompatActivity implements AdapterView.OnIt
         Email = (EditText) (findViewById(R.id.email));
         gender = (Spinner) (findViewById(R.id.Gender));
         typeofaccount = (Spinner) (findViewById(R.id.Type));
+        Exprationdate = (DatePicker) (findViewById(R.id.Expdate));
 
 
         mAuth = FirebaseAuth.getInstance();
@@ -93,6 +140,8 @@ public class CreateAccount extends AppCompatActivity implements AdapterView.OnIt
         adapter2.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
         gender.setAdapter(adapter2);
         gender.setOnItemSelectedListener(this);
+
+
 
         Finish.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -112,6 +161,11 @@ public class CreateAccount extends AppCompatActivity implements AdapterView.OnIt
         String pass = password.getText().toString().trim();
         String typ = typeofaccount.getSelectedItem().toString();
         String gen = gender.getSelectedItem().toString();
+        String Expday = String.valueOf(Exprationdate.getDayOfMonth());
+        String Expmonth = String.valueOf(Exprationdate.getMonth());
+        String Expyear = String.valueOf(Exprationdate.getYear());
+
+
 
         if (pass.length()<6)
         {
@@ -145,13 +199,14 @@ public class CreateAccount extends AppCompatActivity implements AdapterView.OnIt
 
                     userID = mAuth.getCurrentUser().getUid().toString();
                     DocumentReference documentReference = fStore.collection("users").document(userID);
-                    Users user = new Users(finame, laname, ag, typ, em, gen, userID);
+                    Users user = new Users(finame, laname, ag, typ, em, gen, userID, "", Expday + "/" + Expmonth + "/" + Expyear);
                     mStore.child("users").child(userID).setValue(user).addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
                             if (task.isSuccessful())
                             {
                                 Toast.makeText(CreateAccount.this, "Created New Account for " + finame + " " + laname, Toast.LENGTH_SHORT).show();
+
                             }
                             else
                             {

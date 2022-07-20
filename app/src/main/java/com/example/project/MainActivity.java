@@ -145,4 +145,6 @@ public class MainActivity extends AppCompatActivity {
         Intent intent10 = new Intent(this, ViewTrainers.class);
         startActivity(intent10);
     }
+
+
 }

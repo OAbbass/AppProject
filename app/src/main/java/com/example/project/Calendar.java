@@ -90,6 +90,14 @@ public class Calendar extends AppCompatActivity {
                         else
                         {
                             button.setText("Register for Session");
+                            button.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    Intent sender = new Intent(getApplicationContext(), RegisterCalendar.class);
+                                    sender.putExtra("KEY_SENDER", date);
+                                    startActivity(sender);
+                                }
+                            });
                         }
                     }
                 }

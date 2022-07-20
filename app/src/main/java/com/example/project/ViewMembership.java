@@ -106,6 +106,7 @@ public class ViewMembership extends AppCompatActivity {
                         age.setText(user.getAge().toString());
                         gender.setText(user.getGender().toString());
                         type.setText(user.getType().toString());
+                        expiration.setText(user.getExpdate().toString());
                         break;
                     }
                 }

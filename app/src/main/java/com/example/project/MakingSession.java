@@ -53,13 +53,14 @@ public class MakingSession extends AppCompatActivity implements AdapterView.OnIt
     String ID;
     String typecheck;
     String date;
-    String TrainerID;
+    public String TrainerID;
 
-    String Fullname;
+    public String Fullname;
     String TheSession;
     String TheType;
     String TheDate;
     String TheTime;
+    String traineremail;
 
 
     public void onBackPressed() {
@@ -114,21 +115,20 @@ public class MakingSession extends AppCompatActivity implements AdapterView.OnIt
         myRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                for (DataSnapshot dataSnapshot: snapshot.getChildren())
-                {
+                for (DataSnapshot dataSnapshot: snapshot.getChildren()) {
                     Users user = dataSnapshot.getValue(Users.class);
                     String userID = mAuth.getCurrentUser().getUid().toString();
 
-                    if (userID.equals(user.getID().toString()))
-                    {
+                    if (userID.equals(user.getID().toString())) {
                         TrainerID = user.getID();
                         Fullname = user.getFirstname() + " " + user.getLastname();
+                        traineremail = user.getEmail();
                         typecheck = user.getType();
                         first.setText(Fullname);
-                    }
                         break;
                     }
                 }
+            }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
@@ -143,16 +143,23 @@ public class MakingSession extends AppCompatActivity implements AdapterView.OnIt
             public void onClick(View view) {
 
                 Fullname = Fullname;
+                Log.e("NAME", Fullname);
                 TheDate = date;
                 TheTime = tim.getSelectedItem().toString();
                 TheSession = sess.getSelectedItem().toString();
                 TheType = sty.getSelectedItem().toString();
-                String sessionid = fStore.push().getKey();
+                traineremail = traineremail;
+
 
 
                 if (sty.getSelectedItem().toString().equals("Private"))
                 {
-                    Session session = new Session(TheSession, TheType, Fullname, TheDate, TheTime, sessionid, 1, 0, "", TrainerID);
+                    Log.e("NAME", Fullname);
+                    Log.e("ID", TrainerID);
+                    Log.e("EMAIL", traineremail);
+
+                    String sessionid = fStore.push().getKey();
+                    Session session = new Session(TheSession, TheType, Fullname, TheDate, TheTime, sessionid, 1, 0, "", TrainerID, traineremail);
                     fStore.child("sessions").child(sessionid).setValue(session).addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
@@ -170,7 +177,8 @@ public class MakingSession extends AppCompatActivity implements AdapterView.OnIt
                 }
                 else
                 {
-                    Session session = new Session(TheSession, TheType, Fullname, TheDate, TheTime, sessionid, 10, 0, null, TrainerID);
+                    String sessionid = fStore.push().getKey();
+                    Session session = new Session(TheSession, TheType, Fullname, TheDate, TheTime, sessionid, 10, 0, "", TrainerID, traineremail);
                     fStore.child("sessions").child(sessionid).setValue(session).addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {

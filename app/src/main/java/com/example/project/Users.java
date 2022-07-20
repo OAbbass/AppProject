@@ -20,6 +20,7 @@ import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Vector;
@@ -33,11 +34,14 @@ public class Users {
     private String email;
     private String gender;
     private String ID;
+    private String SessionsRegisteredID;
+    private String expdate;
 
 
     public Users() {
     }
-    public Users(String firstname, String lastname, String age, String type, String email, String gender, String ID) {
+
+    public Users(String firstname, String lastname, String age, String type, String email, String gender, String ID, String SessionsRegisteredID, String expdate) {
         this.firstname = firstname;
         this.lastname = lastname;
         this.age = age;
@@ -45,7 +49,8 @@ public class Users {
         this.email = email;
         this.gender = gender;
         this.ID = ID;
-
+        this.SessionsRegisteredID = SessionsRegisteredID;
+        this.expdate = expdate;
     }
 
     public void setFirstname(String firstname) {
@@ -69,6 +74,13 @@ public class Users {
     public void setID(String ID) {
         this.ID = ID;
     }
+    public void setSessionsRegisteredID(String sessionsRegisteredID) {
+        SessionsRegisteredID = sessionsRegisteredID;
+    }
+    public void setExpdate(String expdate) {
+        this.expdate = expdate;
+    }
+
 
 
     public String getFirstname() {
@@ -92,5 +104,10 @@ public class Users {
     public String getID() {
         return ID;
     }
-
+    public String getSessionsRegisteredID() {
+        return SessionsRegisteredID;
     }
+    public String getExpdate() {
+        return expdate;
+    }
+}
